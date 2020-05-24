@@ -20,22 +20,15 @@
 
 <?php
 include "connexpdo.php";
+session_start();
+if(!isset($_SESSION['adminId'])) {
+    header('Location: index.php');
+}
 
 echo '<div class="container col-sm-8" id="contact">
     <h2>Ajout Nouvelle étudiant</h2>
     <hr><br>
     <form method="POST" action="controller.php?func=createEtudiant">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <div class="input-group-text"><span class="material-icons">
-                      perm_identity
-                      </span></div>
-            </div>
-            <input name="user_id" class="form-control" type="text" placeholder="User id" required>
-        </div>
-
-
-        <br />
         <div class="input-group">
             <div class="input-group-prepend">
                 <div class="input-group-text"><span class="material-icons">

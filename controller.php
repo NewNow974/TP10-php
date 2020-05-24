@@ -17,7 +17,7 @@ if(isset($_GET['func']))
     }
 
     if($_GET['func']== "createEtudiant"){
-        if(createEtudiant($_POST['user_id'], $_POST['nom'], $_POST['prenom'], $_POST['note'])){
+        if(createEtudiant($_POST['nom'], $_POST['prenom'], $_POST['note'])){
             header("Location: viewadmin.php");
         }
         else{
@@ -54,6 +54,19 @@ if(isset($_GET['func']))
             echo "Champ incorrect !";
         }
     }
+
+    if($_GET['func']== "Deconnexion"){
+
+        Deconnexion();
+
+    }
+}
+
+function Deconnexion(){
+    session_start();
+    session_unset();
+    header('Location: index.php');
+    exit;
 }
 
 function connectBDDetudiant(){
@@ -80,7 +93,7 @@ function listEtudiant() {
     $nbr_student=sizeof($nbr);
 
     if($nbr_student>=1) {
-        $query1 = "SELECT id, user_id, nom, prenom, note FROM etudiant";
+        $query1 = "SELECT id, user_id, nom, prenom, note FROM etudiant WHERE user_id =".$_SESSION["adminId"];
         $sth = $db->prepare($query1);
         $sth->execute();
         $result=$sth->fetchAll();
@@ -102,9 +115,11 @@ function listEtudiant() {
     }
 }
 
-function createEtudiant($user_id, $nomEtudiant, $prenomEtudiant,$note ){
+function createEtudiant($nomEtudiant, $prenomEtudiant,$note ){
 
     $db=connectBDDetudiant();
+    session_start();
+    $user_id = $_SESSION["adminId"];
     $query = "SELECT count(*) FROM etudiant";
     $numero = $db->query($query);
     $numero->execute();
@@ -142,10 +157,11 @@ function VerifiedAuthentification($loginUser, $passwordUser){
 function NotesMoyenne(){
     $db = connectBDDetudiant();
 
+    //session_start();
     $sommeNotes = 0;
     $nbr_students = 0;
 
-    $q = "SELECT note FROM etudiant";
+    $q = "SELECT note FROM etudiant WHERE user_id=".$_SESSION["adminId"];
     $r = $db->query($q);
     foreach ($r as $data) {
         $sommeNotes+=$data['note'];
@@ -179,7 +195,7 @@ function updateEtudiant($idEt, $user_id, $nomEtudiant, $prenomEtudiant, $note){
 
     $db=connectBDDetudiant();
 
-    $sql = "UPDATE students SET user_id='".$user_id."', nom='".$nomEtudiant."', prenom ='".$prenomEtudiant."', note ='".$note."' WHERE id=".$idEt;
+    $sql = "UPDATE etudiant SET user_id='".$user_id."', nom='".$nomEtudiant."', prenom ='".$prenomEtudiant."', note ='".$note."' WHERE id=".$idEt;
     $stmt = $db->prepare($sql);
     $stmt->execute();
 
@@ -191,6 +207,20 @@ function deleteEtudiant($idEtudiant){
     echo $idEtudiant;
     $db->exec("DELETE FROM etudiant WHERE id=" . $idEtudiant);
     return true;
+
+}
+
+function acctuelNomEdt(){
+    $db=connectBDDetudiant();
+
+
+    $id = $_GET['id'];
+    $sql = "SELECT id, user_id, nom, prenom, note FROM etudiant WHERE id =" . $id;
+    $r = $db->query($sql);
+
+
+    return $r;
+
 
 }
 

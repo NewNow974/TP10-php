@@ -20,9 +20,19 @@
 
 <?php
 include "controller.php";
+$tab=acctuelNomEdt();
+echo $tab;
+foreach ($tab as $data) {
+    $id = $data['id'];
+    $user_id = $data['user_id'];
+    $nom = $data['nom'];
+    $prenom = $data['prenom'];
+    $note = $data['note'];
+}
+
 
 echo '<div class="container col-sm-8" id="contact">
-    <h2>Modification de l\'étudiant </b>'.acctuelNomEdt().'</b></h2>
+    <h2>Modification de l\'étudiant <br></b>'.$id.' '.$note.' '.$nom.' '.$prenom.' '.$user_id.'</b></h2>
     <hr><br>
     <form method="POST" action="controller.php?func=updateEtudiant">
         <div class="input-group">
@@ -67,7 +77,7 @@ echo '<div class="container col-sm-8" id="contact">
         </div>
         <br />
 
-        <button class="btn btn-primary" type="submit">Envoyer</button>
+        <button class="btn btn-primary" name="etudiantId" value="'.$id.'" type="submit">Envoyer</button>
     </form>
 </div>';
 

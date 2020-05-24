@@ -22,6 +22,9 @@
     <!-- Contact -->
 <?php
 session_start();
+if(!isset($_SESSION['adminId'])) {
+    header('Location: index.php');
+}
 $user_id = $_SESSION["adminId"];
 $user_nom = $_SESSION["adminNom"];
 $user_prenom = $_SESSION["adminPrenom"];
@@ -32,7 +35,7 @@ include "controller.php";
 echo '
 <div class="container col-sm-9 jumbotron" id="contact">
     <h2 style="display: inline;">Admin Panel of '.$user_prenom .' '. $user_nom.'</h2>
-        <a style="float: right;" href="index.php" class="button-pe-connect is-blue" data-toggle="tooltip" data-placement="bottom" title="">
+        <a style="float: right;" href="controller.php?func=Deconnexion" class="button-pe-connect is-blue" data-toggle="tooltip" data-placement="bottom" title="">
             <button class="btn btn-info">Deconnexion</button>
         </a>
     <hr>';
